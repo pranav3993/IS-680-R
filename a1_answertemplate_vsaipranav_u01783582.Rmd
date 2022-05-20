@@ -1,0 +1,179 @@
+---
+title: "Assignment1 Submission"
+autor: "V Sai Pranav - U01783582"
+output: html_document
+---
+
+## Answers
+
+
+**1.** 
+```{r}
+mileage <- c(65311 , 65624 , 65908 , 66219 , 66499 , 66821 , 67145 , 67447 )
+mileage
+```
+
+**a.** 
+```{r}
+#diff : 
+diff(mileage, lag = 2, differences = 1)
+```
+Based on the result above, I think the diff() function is used to find the difference between each consecutive pair. In above code lag=2 means the difference is calculated between 1st and 3rd values, then 2nd and 4th values and so on and differences =1 means diff() is called once on a vector.
+
+
+**b.** 
+```{r}
+#length :
+length(mileage)
+```
+This particular result gives us the actual length of the vector mileage
+
+
+```{r}
+length(mileage) <- 3      
+mileage 
+```
+
+This result of length sets the length of vector mileage to 3
+So basically length() is used to get or set the value of a vector.
+
+
+**c.** 
+```{r}
+mean(mileage)
+max(mileage)
+min(mileage)
+sd(mileage)
+```
+
+
+**2.** 
+    
+**a.**  
+```{r}
+commute <- c(17, 16, 20, 24, 22, 15, 21, 15, 17, 22)
+commute                 # Gives us the vector with times in minutes
+mean(commute)           # tells the mean vector commute
+summary(commute)        # gives the statistical summary of vector commute
+```
+
+**b.** 
+```{r}
+commute[4] = 18
+commute                   # new value has been assigned
+```
+
+
+```{r} 
+mean(commute)   #new mean of commute
+```
+
+**c.**
+```{r}
+commute[commute>=20] # as you can see our commute was more than or equal to 20, 4 times
+```
+
+
+**d.**  
+```{r}
+commute[commute<17]   # There are 3 values less than 17 
+```
+```{r}
+x=length(commute[commute<17])         # length of values are stored in vector x which is less than 17
+x
+y=length(commute)                  # Total length of values is stored in the vector y
+y
+z = x/y*100                     # Here we have done basic percentage calculation to get the percentage which is 30
+z
+```
+
+**e.**
+
+```{r}
+commute + 1
+```
+The function above adds one to all the values in the vector.
+
+```{r}
+commute[-6]
+```
+The function above gives us all the values but not the value in which has an index of 6.
+
+```{r}
+sum(commute>21 | commute<16) 
+```
+The function above will first check for the values that are greater than 21 or less than 16. Since |(or) is a logical operation it will either give True(1) or False(0). As a result we got sum as 4 which means that there are 4 True(1) in the condition inside sum.
+
+```{r}
+commute[commute>=17]
+```
+The function above will give us all the values in commute that are greater than or equal to 17
+
+```{r}
+sum(commute[commute>20])
+```
+The function above gives us the sum of all the values in commute which are greater than 20
+```{r}
+commute[4:6] 
+```
+The function above will give us all the values in commute which are in index 4 to index 6
+
+
+**3.**
+```{r}
+x = c(1,2,3,4,5,6,6,7,7,9)      # As the data for 3rd question is not visible in the questions I have considered the following data and done the computations as asked.
+x
+length((x))               
+```
+**a.**
+```{r}
+sum(x)/10    # This command will give us 5 because sum(x) = 50, and if we divide 50 by 10 answer is 5.
+```
+**b.**
+```{r}
+log10(x)
+#OR
+log10(x[1:10])   #Both of the commands will give the same output. It is up-to the user which one you want to use.
+```
+**c.**
+```{r}
+(x^4.4)/2.875
+#OR 
+(x[1:10]^4.4)/2.875     #Both of the commands will give the same output. It is up-to the user which one you want to use.
+```
+**d.**
+```{r}
+max(x)   # will give maximum value in vector x
+min(x)   # will give minimum value in vector x
+a = max(x) - min(x)
+a         # The difference between maximum value am minimum value in x is stored in "a"
+```
+
+
+**4.** 
+  **a.** 
+  
+```{r}
+bill = c(46, 33, 39, 37, 46, 30, 48, 32, 49, 35, 30, 48)
+bill
+range(bill)         # gives maximum and minimum values
+range(bill)[1]       # gives minimum value
+range(bill)[2]       # gives maximum value
+range(bill)[2]-range(bill)[1]   # gives the difference between maximum and minimum value.
+```
+The function above will give the maximum and minimum values in the given vector, we can use the same function to solve the last question in 3rd question.
+
+  **b.** 
+  
+```{r}
+bill[bill>40]   # As we can see the bill was greater than 40 for 5 months.
+```
+```{r}
+x=length(bill[bill>40])         # length of values are stored in vector x which are greater than 40
+x
+y=length(bill)                  # Total length of values is stored in the vector y
+y
+z = x/y*100                     # Here we have done basic percentage calculation to get the percentage which is 41.66667
+z
+```
+

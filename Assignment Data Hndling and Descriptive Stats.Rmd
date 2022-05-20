@@ -1,0 +1,203 @@
+---
+title: "Assignment Data handling and Descriptive Statistics"
+output: html_notebook
+---
+
+```{r}
+require(tidyverse)
+```
+**1**
+
+```{r}
+data = read.csv('C:/Users/prana/Desktop/IS-680-R/cereals.csv')
+data
+```
+
+
+```{r}
+names(data)
+```
+
+```{r}
+summary(data)
+```
+As we can see that there are NA's in the Carbo and Sugars columns in data-frame. 
+
+
+**Fixing the issues**
+**Evaluating the missingness**
+```{r}
+sum(is.na(data))
+```
+The total number of NA's in a data frame is 2 
+
+```{r}
+dim(data)
+```
+The above is to get the dimension of data
+
+```{r}
+a = prod(dim(data))
+```
+Here we will store the product of dimensions in 'a' vector in order to get the percentage of the NA's in a data frame.
+
+
+**Percentage of missingness**
+```{r}
+(sum(is.na(data))*100) / a
+```
+In order to calculate the percentage we have taken the sum of NA's and multiplied it with the 100 and divided with the product of dimensions in the data-frame.
+
+
+```{r}
+mean(is.na(data)) * 100
+```
+Another way to calculate the percentage of the NA's in DF is using the mean function which we can see above. The result obtained is same in the above chunck and the chunk above that.
+
+**Columns with NA's**
+```{r}
+colSums(is.na(data))
+```
+The above command gave us the number of NA's in the specific columns in a data frame. So here we can clearly say that Carbo and Sugras are the columns that have NA's.
+
+
+```{r}
+mean(is.na(data$Carbo)) * 100
+```
+The above is the percentage of the NA's in the Carbo Column
+
+```{r}
+mean(is.na(data$Sugars)) * 100
+```
+The above is the percentage of the NA's in the Sugars Column
+
+
+**Index with NA**
+```{r}
+which(is.na(data$Sugars), arr.ind = TRUE)
+```
+The above is the command to locate the NA's index in the data-frame. 
+
+
+**Populating the missing value with mean of the column**
+```{r}
+data$Carbo[is.na(data$Carbo)]<-mean(data$Carbo,na.rm=TRUE)
+```
+
+
+```{r}
+data$Carbo
+```
+As you can see we have replaced the NA in the Carbo Column with the mean of the existing values in the column Carbo
+
+```{r}
+data$Sugars[is.na(data$Sugars)]<-mean(data$Sugars,na.rm=TRUE)
+```
+
+```{r}
+which(is.na(data$Sugars), arr.ind = TRUE)
+```
+As we have replaced the NA with the mean values we can see that there are no NA'S in Sugars column
+
+```{r}
+colSums(is.na(data))
+```
+As you can see above now we do not have any NA's in the data-frame.
+
+
+**2**
+
+```{r}
+cal_srt <- sort(data$Calories)
+cal_srt
+```
+Sorting the data to egt the accurate results.
+
+**Measure of Centrality**
+**Average value**
+```{r}
+mean(cal_srt)
+```
+**Median value**
+```{r}
+median(cal_srt)
+```
+
+**Most Repeating value**
+```{r}
+mode(cal_srt)
+```
+
+**Measure of Spread**
+**Varience**
+```{r}
+var(cal_srt)
+```
+
+**Standard Deviation**
+```{r}
+sd(data$Calories)
+```
+
+**Quantile**
+```{r}
+quantile(data$Calories, probs = c(0,0.2,0.4,0.6,0.8,1))
+```
+Here Quantile is used to split the data into 5 different pieces.
+
+**Inter Quartile Range**
+```{r}
+IQR(data$Calories)
+```
+
+
+**3**
+**Calories Histogram**
+```{r}
+ggplot(data, aes(sort(data$Calories))) +
+  geom_histogram(binwidth = 13)
+```
+From the above Histogram we can say that lot of items contain around 87-124gms of calories.
+
+**Protein Histogram**
+```{r}
+ggplot(data, aes(sort(data$Protein))) +
+  geom_histogram(binwidth = 1)
+```
+Here we can say that the amount of protein in the items is around 1-3gms.
+
+In order to plot the data accurately I have sortered the columns first and used the 'binwidth' option to get the understandable distribution of data.
+
+**4**
+**Boxplot to spot outliers**
+```{r}
+ggplot(data, aes(Protein)) +
+  geom_boxplot()
+```
+In order to spot the outliers we have used boxplot. The maximum value is around '5' and the values outide this range can be counted as outliers.
+
+```{r}
+items<- data_amount %>%
+          select(Name,Protein) %>%
+          filter(Protein >= 5 )
+items
+```
+So from the above chunk we can see that Cheerios, Quaker_Oatmeal and Special_K are the items with High protein content as the are outside the actual range data points of the column.
+
+
+**5**
+```{r}
+data_amount <- data
+```
+Making the copy of data so that it does not affect actual data.
+
+```{r}
+data_amount %>%
+  mutate(prtn_amount = Protein/Calories) %>%
+  summarize(mean_prtn_amt = mean(prtn_amount))
+```
+The average amount of protein per calories for an item is 0.0249 as per the chunk above.
+
+
+
+

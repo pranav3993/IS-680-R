@@ -1,0 +1,152 @@
+---
+title: "Lab_Data Handling_V SAI PRANAV_U01783582"
+output: html_notebook
+---
+```{r}
+library(tidyverse)
+```
+
+```{r}
+library(nycflights13)
+```
+
+**Exercise_1**
+```{r}
+flights
+```
+
+```{r}
+names(flights)
+```
+```{r}
+glimpse(flights)
+```
+I have used names and glimpse to explore the data.
+
+
+**Exercise_2**
+```{r, warning=0}
+ggplot(flights, aes(dep_delay, fill = carrier)) +
+  geom_histogram(position = "dodge",alpha = 0.8, binwidth = 2000)
+```
+```{r,  warning=0}
+ggplot(flights, aes(dep_delay)) +
+  geom_histogram()
+```
+As you can see the difference between plot 1 and plot 2 that we are able to extract information on which flight had more number of delayed departures but in second plot we cannot say that 
+
+**Exercise_3**
+```{r,  warning=0}
+flights_LAX <- flights %>%
+                filter(dest == "LAX")
+flights_LAX
+```
+Here the data set 'flights_LAX' all the info about the flights with the destination = LAX.
+
+```{r,  warning=0}
+ggplot(flights_LAX, aes(dep_delay, fill = carrier)) +
+  geom_histogram(position = "dodge",alpha = 0.8, binwidth = 200)
+```
+As you can see clearly that flight carrier "UA" has more number of delays in departure then "AA", and then "VX", so on.
+
+**Exercise_4**
+```{r, warning=0}
+flights %>%
+  group_by(dep_delay) %>%
+  summarize(mean_dd = mean(dep_delay),
+            median_dd = median(dep_delay),
+            n = n())
+
+  
+```
+Here as you can see we get the mean median as well as th count too.
+
+
+**Exercise_5**
+```{r, warning = 0}
+sfo_feb_flights <- flights %>%
+                      filter(dest=='SFO', month == 2)
+sfo_feb_flights
+```
+All the data of flights reaching to SFO is in "sfo_feb_flights"
+
+```{r, warning=0}
+sfo_feb_flights %>%
+  group_by(flight, carrier) %>%
+  count(flight) %>%
+  arrange(flight)
+```
+In the above chunk we got the count of the flights going to SFO in a sorted order performed on flights.
+
+**Exercise_6**
+
+```{r}
+summary(sfo_feb_flights)
+```
+As you can see that there are NA's in dep_delay, arr_delay. We have to get rid of them in-order to work with summarize.
+
+
+```{r, warning=FALSE}
+sfo_feb_flights_NA_rem <- na.omit(sfo_feb_flights)
+```
+I have stored the data frame without NA's into sfo_feb_flights_NA_rem
+
+```{r}
+summary(sfo_feb_flights_NA_rem)
+```
+All the NA's have been removed.
+
+```{r}
+sfo_feb_flights_NA_rem %>%
+  group_by(carrier) %>%
+  summarize(median_dd = median(arr_delay),
+            iqr_dd = IQR(arr_delay))
+```
+The above Output is the median and the iqr grouped by carrier as requested. 
+
+**Exercise_7**
+
+```{r}
+summary(flights)
+```
+We will clear the NA's from the dataframe and store it in a new dataframe as we did earlier.
+
+```{r}
+flights_NA_rem <- na.omit(flights)
+```
+
+```{r}
+summary(flights_NA_rem)
+```
+As you can see there are no NA's in the new dataframe.
+
+
+```{r}
+flights_NA_rem %>%
+  group_by(month) %>%
+  summarize(mean_dd = mean(dep_delay))%>%
+  arrange(desc(mean_dd))
+```
+As it was asked in the question to arrange the average in descending order, I have arranged it that way.
+
+
+**Exercise_8**
+```{r}
+flights_avg_speed <- flights %>%
+                      mutate(avg_speed = distance/(air_time/60))
+
+flights_avg_speed
+
+```
+Flights_avg speed has the data with average speed as a new column in it.
+
+**Exercise_9**
+```{r,warning=FALSE}
+ggplot(flights_avg_speed, aes(avg_speed,distance), color = flight) +
+  geom_point() +
+  scale_x_log10() +
+  scale_y_log10() +
+  facet_wrap(~carrier)
+```
+The above graph is faceted based on the carrier so you can see the scatter plots of respective carriers.
+

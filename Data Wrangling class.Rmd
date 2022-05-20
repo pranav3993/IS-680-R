@@ -1,0 +1,94 @@
+---
+title: "Data Wrangling Class"
+output: html_notebook
+---
+
+```{r message=FALSE}
+require(tidyverse)
+```
+
+
+```{r}
+hotels = read.csv("C:/Users/prana/Desktop/IS-680-R/hotels.csv")
+
+hotels
+```
+
+```{r}
+glimpse(hotels)
+```
+
+```{r}
+names(hotels)
+```
+
+```{r}
+hotels[,"lead_time"]
+```
+
+```{r}
+select(.data=hotels, lead_time)
+```
+
+```{r}
+select(hotels, hotel, lead_time)    # Can do as many as you can
+```
+
+```{r}
+arg = select(hotels, hotel, lead_time)
+```
+
+```{r}
+arrange(arg, desc(lead_time))
+```
+
+```{r}
+hotels %>%
+  select(hotel,adr,company,country)
+```
+```{r}
+hotels %>%
+  select(-hotel,-adr)
+```
+
+```{r}
+hotels %>%
+  select(hotel:lead_time)
+```
+
+```{r}
+hotels %>%
+  select(starts_with("arrival"))
+```
+
+```{r}
+hotels %>%
+  select(hotel,adults,children,babies) %>%
+  arrange(hotel) %>%
+  slice(1:10, 50:1000, 30000)
+  
+```
+
+```{r}
+lst = nrow(hotels)
+
+hotels %>%
+  select(hotel,adults,children,babies) %>%
+  arrange(hotel) %>%
+  slice(lst - 7:lst)
+```
+
+```{r}
+hotels %>%
+  filter(hotel == "Resort Hotel")
+```
+
+```{r}
+hotels %>%
+  filter(arrival_date_month %in% c('July','August'))
+```
+
+```{r}
+
+```
+

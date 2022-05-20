@@ -1,0 +1,126 @@
+---
+title: "IS-680 FINAL FALL'21 V_SAI_PRANAV"
+author: "V Sai Pranav"
+date: "12/23/2021"
+output: html_document
+---
+
+```{r}
+require(tidyverse)
+```
+
+```{r}
+pac=read_csv(url('https://ygenc.github.io/lectures/data/pac_all_raw.csv'))
+pac
+```
+
+**Question 1**
+**A**
+```{r}
+summary(pac)
+```
+Looking at the summary we can identify that there are NA values in the total, dems, repubs columns of data frame which is the first issue.
+
+```{r}
+ggplot(pac, aes(total)) +
+  geom_boxplot() 
+```
+Another issue is that there are outliers too in the 'total; column of the data set.
+
+
+
+```{r}
+pac %>%
+  group_by(dems) %>%
+  summarize(n = n())
+```
+Another issue is that number of zeros in dems, total and repubs columns is more.
+
+**B**
+```{r}
+sum(is.na(pac))
+```
+Aas we can see there are NA's in the dataset.
+
+```{r}
+pac_no_na <- na.omit(pac)
+```
+The above chunk is to remove all the NA values in the data set and stores the data into new dataset.
+
+```{r}
+sum(is.na(pac_no_na))
+```
+There no NA's now in dataset.
+
+**Question 2**
+**A**
+```{r}
+ggplot(data = pac_no_na, mapping = aes(x = total, fill = country)) +
+  geom_histogram(binwidth = 100000, alpha = 0.8)
+
+```
+As you cans see the graph the the distribution curve goes on decreasing as the value in the column increases.
+
+**B**
+```{r}
+pac_smry <- pac_no_na %>%
+              summarize(mean_tot = mean(total), st_dev = sd(total))
+pac_smry
+```
+Here in above chunk mean will give us the average value in the 'total' column and standard deviation will tell us if the data points are near to value 138217. 
+
+**C**
+```{r}
+pac_rpt <- pac_no_na %>%
+            group_by(country) %>%
+            summarize(total_contri = sum(total), mean_contri = mean(total))
+pac_rpt
+```
+From the above chunk you can see that the report above displays the total and the mean contribution for each country.
+
+**Question 3**
+```{r, fig.height = 3, fig.width = 7}
+pac_sct <- ggplot(pac, aes(x=dems,y=repubs, alpha = total)) +
+                  geom_point()
+pac_sct + labs(title = "Contributions from PAC's", 
+                   x="Democratic Contribution",y="Republican Contribution")
+```
+as you can see the graph has been replicated as it was asked to. The figure height and the width is also specified.
+
+**Question 4**
+**A**
+```{r}
+plt <- pac_no_na %>%
+            select(year, dems, repubs)
+plt
+
+bar_plt <- pivot_longer(plt, -year, names_to="variable", values_to="value")
+```
+In the above chunk I have only selected the dems, repubs and year columns and stored them into a new data frame.Then used pivot longer in order to plot the bar plot. Pivot longer here will exclude the year column and take the rest of the two columns as variables.
+
+```{r}
+ggplot(bar_plt,aes(x = year,y = value)) + 
+    geom_bar(aes(fill = variable),stat = "identity",position = "dodge")
+```
+As you can see int he graph above most of the times Republicans are the ones who were getting more contributions when compared to democrats over the time. Democrats got more contribution only in between the year 2007 to 2010.
+
+**B**
+```{r}
+pac_box<-ggplot(pac_no_na, aes(x=total, y=country, fill = country)) +
+  geom_boxplot()
+pac_box
+```
+From the box plot above you can see that the UK, Switzerland, Ireland, Germany, Bermuda etc. are the countries which have contributed more than other countries.
+
+**Question 5**
+Which country has contributed more to Republicans ?
+```{r}
+ggplot(pac_no_na, aes(x="", y=repubs, fill=country)) +
+  geom_bar(stat="identity", width=1) +
+  coord_polar("y", start=0) +
+  theme_void()
+  
+```
+As I wanted to show something with pie plot in the above plot we can see that which country has contributed more to the republicans. UK, Switzerland and Germany are the countries we can say that has contributed more to the Republicans based on the data set.
+
+

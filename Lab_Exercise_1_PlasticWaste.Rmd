@@ -1,0 +1,160 @@
+---
+title: "Lab_1 Plastic Waste"
+output: html_notebook
+---
+
+```{r}
+library(tidyverse)
+```
+```{r}
+plastic_waste <- read_csv("C:/Users/prana/Desktop/IS-680-R/plastic-waste.csv")
+```
+```{r}
+spec(plastic_waste)
+```
+```{r}
+plastic_waste
+```
+
+
+```{r}
+ggplot(data = plastic_waste, aes(x = plastic_waste_per_cap)) +
+  geom_histogram(binwidth = 0.2)
+```
+```{r}
+plastic_waste %>%
+  filter(plastic_waste_per_cap > 3.5)
+```
+
+**Exercise_1:**
+```{r}
+ggplot(data = plastic_waste, aes(x = plastic_waste_per_cap)) +
+  facet_grid(.~continent) +
+  geom_histogram(binwidth = 0.2)
+```
+```{r}
+ggplot(data = plastic_waste, aes(x = plastic_waste_per_cap)) +
+  geom_density()
+```
+```{r}
+ggplot(data = plastic_waste, aes(x = gdp_per_cap)) +
+  geom_density()
+```
+```{r}
+ggplot(data = plastic_waste, 
+       mapping = aes(x = plastic_waste_per_cap, 
+                     color = continent)) +
+  geom_density()
+```
+```{r}
+ggplot(data = plastic_waste, 
+       mapping = aes(x = plastic_waste_per_cap, 
+                     color = continent, 
+                     fill = continent)) +
+  geom_density()
+```
+```{r}
+ggplot(data = plastic_waste, 
+       mapping = aes(x = plastic_waste_per_cap, 
+                     color = continent, 
+                     fill = continent)) +
+  geom_density(alpha = 0.7)
+```
+**Exercise_2:**
+
+```{r}
+ggplot(data = plastic_waste, 
+       mapping = aes(x = gdp_per_cap, 
+                     color = continent, 
+                     fill = continent)) +
+  geom_density(alpha = 0.2)
+```
+
+```{r}
+ggplot(data = plastic_waste, 
+       mapping = aes(x = gdp_per_cap, 
+                     color = continent, 
+                     fill = continent)) +
+  geom_density(alpha = 0.5)
+```
+
+**Exercise_3:**
+
+```{r}
+ggplot(data = plastic_waste, 
+       mapping = aes(x = gdp_per_cap, 
+                     )) +
+  geom_density(alpha = 0.5)
+```
+
+
+```{r}
+ggplot(data = plastic_waste, 
+       mapping = aes(x = gdp_per_cap, 
+                     color = continent, 
+                    )) +
+  geom_density(alpha = 0.5)
+```
+```{r}
+ggplot(data = plastic_waste, 
+       mapping = aes(x = gdp_per_cap, 
+                     fill = continent)) +
+  geom_density(alpha = 0.5)
+```
+As we can see that in the first plot where there is no color we get a parabolic curve which shows gdp_per_cap.
+
+Where as, in the second plot in which we have used color inside the ggplot we get the borders of the gdp_per_cap of every continents.
+
+In addition, the third plot where we used the fill in the ggplot it will fill the place below the borders with the colors.
+
+In sum we use color and fill for coloring the continents and alpha to set the opacity of the plot.
+
+```{r}
+ggplot(data = plastic_waste, 
+       mapping = aes(x = continent, 
+                     y = plastic_waste_per_cap)) +
+  geom_boxplot()
+```
+
+**Exercise_4:**
+
+```{r}
+ggplot(data = plastic_waste, 
+       mapping = aes(x = continent, 
+                     y = plastic_waste_per_cap)) +
+  geom_violin()
+```
+
+As you can see the violin plot, it nicely reveals the structure in the data whereas box plot does not do that.
+
+Basically violin plots can plot the numerical data while the box plot is used to plot statistics such as the mean, median and iqr ranges.
+
+**Exercise_5:**
+```{r}
+ggplot(plastic_waste, aes(mismanaged_plastic_waste_per_cap, plastic_waste_per_cap)) +
+  geom_point(alpha = 0.9)
+
+```
+Looking at the scatter plot we can say that there is a fairly strong and positive linear correlation between both the attributes that we have selected as x,y.
+
+
+**Exercise_6:**
+
+```{r}
+ggplot(plastic_waste, aes(mismanaged_plastic_waste_per_cap, plastic_waste_per_cap,
+                          color = continent,
+                          fill = continent)) +
+  geom_point(alpha = 0.9)
+
+```
+Looking at the plot we can say that which color describes the respective continent perfectly.
+
+**Exercise_7:**
+```{r}
+ggplot(plastic_waste, aes(coastal_pop/total_pop, plastic_waste_per_cap,
+                          color = continent,
+                          fill = continent)) +
+  geom_point(alpha = 0.9)
+  labs(x="Plastic waste per captia", y="Coastal population proportion(coastal/total population)")
+```
+

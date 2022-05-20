@@ -1,0 +1,58 @@
+---
+title: "Visualization"
+output: html_notebook
+---
+
+```{r}
+install.packages("tidyverse")
+```
+
+```{r}
+library(tidyverse)
+```
+```{r}
+starwars
+```
+
+```{r}
+glimpse(starwars)
+```
+
+```{r}
+str(starwars)
+```
+```{r}
+?ggplot2
+```
+
+```{r}
+head(starwars)
+```
+
+```{r} 
+ggplot(data = starwars, mapping = aes(x = height, y = mass))+
+            geom_point()
+```
+```{r}
+ggplot(data = starwars,mapping = aes(x = height, y = mass, color=gender))+
+            geom_point()
+```
+
+```{r}
+ggplot(data = starwars,mapping = aes(x = height, y = mass, color=gender, size = birth_year))+
+            geom_point()
+```
+
+
+```{r}
+ggplot(data = starwars,mapping = aes(x = height, y = mass, color=gender, size  = birth_year))+
+            geom_point(size =2)
+```
+
+
+```{r}
+ggplot(data = starwars,mapping = aes(x = height, y = mass))+
+  facet_grid(.~gender)          
+  geom_point()
+```
+

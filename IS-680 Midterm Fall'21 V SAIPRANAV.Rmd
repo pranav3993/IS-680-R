@@ -1,0 +1,221 @@
+---
+title: "IS-680_FALL_MIDTERM_V_SAI_PRANAV"
+output: html_notebook
+---
+
+
+```{r}
+require(tidyverse)
+movies=read_csv(url('https://ygenc.github.io/lectures/data/movies.csv'))
+```
+Loading the data
+
+```{r}
+movies
+```
+**QUESTION_1**
+
+**A**
+```{r}
+glimpse(movies)
+```
+```{r}
+str(movies)
+```
+As we have used str() and glimpse we can see the datatypes of the columns in movies.
+
+```{r}
+names(movies)
+```
+**B**
+```{r}
+ncol(movies)
+```
+With ncol() we can check the number of the columns in the dataframe
+
+```{r}
+nrow(movies)
+```
+With nrow() we can check the number of the rows in the dataframe
+
+**C**
+```{r}
+movies_1 <- movies
+```
+making copy of data frame so that actual data does not affect
+
+```{r}
+category <- cut(movies_1$budget_2013, breaks = 3, labels = c("low","medium","high"))
+table(category)
+```
+As you can see above, We have used cut() function in-order to transform the numerical value to categorical value by dividing the budget_2013 to low budgeted, medium budgeted and high budgeted films.
+
+```{r}
+movies_1$budget_2013[1:10]
+```
+
+
+```{r}
+category[1:10]
+```
+The above two chucks compares the first 10 rows that are in numerical and categorical format.
+
+
+**QUESTION2**
+
+**A**
+```{r, warning=FALSE}
+ggplot(movies, aes(x = budget_2013, fill = binary)) +
+  geom_histogram(position = "dodge",alpha = 0.8) +
+  ggtitle("Distribution of Adjusted Budget_2013")
+```
+In the above graph we have examined the distribution using histograms based on whether the movie has passed or failed the bechdel test.
+
+**B**
+```{r, warning=FALSE}
+movies_plot <- ggplot(movies, aes(x=domgross,y=intgross)) +
+                  geom_point(alpha = 0.9)
+movies_plot + labs(title = "relationship between international gross abd domestic gross", 
+                   x="domestic gross",y="international gorss")
+```
+Looking at the graph we can say that there is high correlation between International gross and the domestic gross. Also we have used labs to display the titles.
+
+
+**C**
+```{r, warning=FALSE}
+plot_color <- ggplot(movies, aes(x=domgross,y=intgross, color = binary)) +
+                  geom_point(alpha = 0.9)
+plot_color +  labs(title = "relationship between international gross abd domestic gross", 
+                   x="domestic gross",y="international gorss")
+
+```
+Here we have passed binary to color aesthetic so that we can see whether the movie has passed or failed.
+
+
+**D**
+```{r, warning=FALSE}
+
+bar_plot <- ggplot(movies_1, aes(x = clean_test, fill = clean_test)) +
+              geom_bar() +
+              geom_text(stat = 'count', aes(label = ..count..), vjust=2) # This line is to get the count 
+
+
+bar_plot + labs(title = "Bechdel Test Result without discrepancies", 
+                   x="result", y="Count of Respective Category")
+
+```
+For this question I opted a bar graph where numerical value is the count and the categorical value is the clean_test column.
+
+  
+**QUESTION_3**
+**A**
+```{r}
+library(dplyr)
+
+movies_2000 <- movies %>%
+                filter(year > "2000")
+
+movies_2000_cleantest <- select(movies_2000, -clean_test)
+movies_2000_cleantest
+```
+
+**B**
+```{r}
+movies_2013 <- movies %>%
+                filter(year == "2013")
+
+movies_2013_req <- select(movies_2013, year,title,clean_test,budget_2013:intgross_2013)
+movies_2013_req
+```
+
+**C**
+```{r}
+movies_revenue <- movies_2013_req %>%
+                    mutate(revenue = (domgross_2013 + intgross_2013) - budget_2013) %>%
+                    arrange(desc(revenue)) %>%
+                    group_by(title)
+
+movies_revenue
+
+```
+The above chunk will give us the calculated revenue column.
+
+```{r}
+movies_revenue$title[1:10]
+```
+As you can see the top 10 movie titles are same that we got in the above chunk
+
+
+**D**
+In this question we will calculate and display the total earnings of the movie.
+
+```{r}
+movies_task = movies %>%
+                select(year:title,binary,budget_2013:intgross_2013) %>%
+                group_by(year) %>%
+                mutate(total_earned = domgross_2013 + intgross_2013)
+
+movies_task
+
+```
+
+```{r}
+ggplot(movies_task, aes(x=year, y=total_earned, color = year)) +
+  geom_point(alpha = 0.9)
+
+```
+
+The above graph displays the total earnings by the movie for the years 1970-2013.
+
+
+**Question_4**
+
+**A**
+
+```{r}
+movies_avg <- movies %>%
+                group_by(clean_test) %>%
+                summarise(total = n(),
+                          avg_budget = mean(budget_2013),
+                          avg_domgros = mean(domgross_2013, na.rm = TRUE)) %>%
+                mutate(percentage = (total/sum(total))*100)
+movies_avg
+```
+
+
+```{r}
+movies_pass <- movies %>%
+                group_by(year,binary) %>%
+                summarise(total = n()) %>%
+                mutate(percentage = (total/sum(total))*100) %>% 
+                filter(binary == "PASS")
+movies_pass
+```
+
+
+**Question_5**
+
+**A**
+
+```{r, warning=FALSE}
+plot_color <- ggplot(movies, aes(x=log(budget),y=log(intgross), color = binary, shape = clean_test, alpha = year)) +
+                  geom_point() +
+                  facet_wrap(~binary)
+plot_color + labs(title = "budget VS intgross in Log Scale")
+```
+
+**B**
+
+```{r}
+movies %>%
+  mutate(above_avg_budget = budget_2013 > mean(budget_2013)) %>%
+  group_by(above_avg_budget, binary) %>%
+  summarize(count = n())
+
+```
+
+As you can see solutions for A,B are the replica of the questions that were asked to do.
+
+
+
+
